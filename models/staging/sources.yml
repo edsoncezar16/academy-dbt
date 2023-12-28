@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: indicium-ae-certification # aqui você deve substituir pelo nome do dataset criado pela ferramenta de ingestão no bigquery
+    schema: sap_adw
+    description: Essa é a fonte de dados do nosso SAP
+    tables:
+      - name: customer
+        description: Essa é a tabela de clientes do SAP.
+
+      - name: person
+        description: Essa é a tabela de pessoas do SAP.
+
+      - name: businessentitycontact
+        description: Essa é a tabela de contatos de entidades de negósio do SAP.
+        
+ 
