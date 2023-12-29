@@ -9,7 +9,7 @@ with
         select
             row_number() over (order by ID_MOTIVO_VENDA) as SK_MOTIVO_VENDA -- auto-incremental surrogate key
             , ID_MOTIVO_VENDA
-            MOTIVO_VENDA
+            , MOTIVO_VENDA
         from staging
 )
 
