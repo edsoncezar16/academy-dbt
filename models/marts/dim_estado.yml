@@ -1,0 +1,16 @@
+version: 2
+ 
+models:
+ - name: dim_estado
+   columns:
+     - name: sk_estado
+       description: A chave surrogate do estado.
+       tests:
+         - unique
+         - not_null
+    
+     - name: id_estado
+       description: A chave natural do estado.
+
+     - name: estado
+       description: Nome do estado.
