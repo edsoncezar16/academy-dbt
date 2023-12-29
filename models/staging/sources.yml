@@ -3,10 +3,10 @@ version: 2
 sources:
   - name: indicium-ae-certification # aqui você deve substituir pelo nome do dataset criado pela ferramenta de ingestão no bigquery
     schema: sap_adw
-    description: Essa é a fonte de dados do nosso SAP
+    description: Essa é a fonte de dados do nosso ERP
     tables:
       - name: customer
-        description: Essa é a tabela de clientes do SAP.
+        description: Essa é a tabela de clientes do ERP.
         columns:
           - name: customerid
             description: Essa é a chave primária da tabela fonte de clientes.
@@ -22,10 +22,19 @@ sources:
                  to: source('indicium-ae-certification', 'person')
 
       - name: person
-        description: Essa é a tabela de pessoas do SAP.
+        description: Essa é a tabela de pessoas do ERP.
         columns:
           - name: businessentityid
             description: Essa é a chave primária da tabela fonte de pessoas.
+            tests:
+              - unique
+              - not_null
+      
+      - name: salesreason
+        description: Essa é a tabela de motivo de vendas do ERP.
+        columns:
+          - name: salesreasonid
+            description: Essa é a chave primária da tabela fonte de motivo de vendas.
             tests:
               - unique
               - not_null
