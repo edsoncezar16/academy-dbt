@@ -7,11 +7,27 @@ sources:
     tables:
       - name: customer
         description: Essa é a tabela de clientes do SAP.
+        columns:
+          - name: customerid
+            description: Essa é a chave primária da tabela fonte de clientes.
+            tests:
+              - unique
+              - not_null
+          
+          - name: personid
+            description: Essa é a chave estrangeira da tabela fonte de clientes para a tabela fonte de pessoas.
+            tests:
+              - relationships:
+                 field: businessentityid
+                 to: source('indicium-ae-certification', 'person')
 
       - name: person
         description: Essa é a tabela de pessoas do SAP.
+        columns:
+          - name: businessentityid
+            description: Essa é a chave primária da tabela fonte de pessoas.
+            tests:
+              - unique
+              - not_null
 
-      - name: businessentitycontact
-        description: Essa é a tabela de contatos de entidades de negósio do SAP.
-        
  
