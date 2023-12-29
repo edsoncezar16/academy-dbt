@@ -56,4 +56,12 @@ sources:
             tests:
               - unique
               - not_null
- 
+
+      - name: countryregion
+        description: Essa é a tabela de países do ERP.
+        columns:
+          - name: countryregioncode
+            description: Essa é a chave primária da tabela fonte de países.
+            tests:
+              - unique
+              - not_null
