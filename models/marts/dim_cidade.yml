@@ -1,0 +1,13 @@
+version: 2
+ 
+models:
+ - name: dim_cidade
+   columns:
+     - name: sk_cidade
+       description: A chave surrogate de cidade.
+       tests:
+         - unique
+         - not_null
+    
+     - name: cidade
+       description: Nome da cidade.
