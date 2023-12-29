@@ -39,4 +39,13 @@ sources:
               - unique
               - not_null
 
+      - name: stateprovince
+        description: Essa é a tabela de estados do ERP.
+        columns:
+          - name: stateprovinceid
+            description: Essa é a chave primária da tabela fonte de estados.
+            tests:
+              - unique
+              - not_null
+
  
