@@ -1,0 +1,13 @@
+version: 2
+ 
+models:
+ - name: dim_tipo_cartao
+   columns:
+     - name: sk_tipo_cartao
+       description: A chave surrogate do tipo de cartão.
+       tests:
+         - unique
+         - not_null
+    
+     - name: tipo_cartao
+       description: O tipo de cartão utilizado em um pedido.

@@ -89,3 +89,13 @@ sources:
             tests:
               - unique
               - not_null
+
+
+      - name: creditcard
+        description: Essa é a tabela de cartões de crédito do ERP.
+        columns:
+          - name: creditcardid
+            description: Essa é a chave primária da tabela fonte de cartões de crédito.
+            tests:
+              - unique
+              - not_null
