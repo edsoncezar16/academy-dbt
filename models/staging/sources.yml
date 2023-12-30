@@ -48,6 +48,14 @@ sources:
               - unique
               - not_null
 
+          - name: countryregioncode
+            description: Essa é a chave estrangeira da tabela fonte de estados para a tabela de países.
+            tests:
+              - relationships:
+                  field: countryregioncode
+                  to: source('indicium-ae-certification', 'countryregion')
+
+
       - name: address
         description: Essa é a tabela de endereços do ERP.
         columns:
@@ -56,6 +64,13 @@ sources:
             tests:
               - unique
               - not_null
+          
+          - name: stateprovinceid
+            description: Essa é a chave estrangeira da tabela fonte de endereços para a tabela de estados.
+            tests:
+              - relationships:
+                  field: stateprovinceid
+                  to: source('indicium-ae-certification', 'stateprovince')
 
       - name: countryregion
         description: Essa é a tabela de países do ERP.
@@ -70,13 +85,7 @@ sources:
         description: Essa é a tabela de cabeçalhos de pedidos de vendas do ERP.
         columns:
           - name: salesorderid
-            description: Essa é uma chave primária composta da tabela fonte de cabeçalhos de pedidos de vendas.
-            tests:
-              - unique
-              - not_null
-          
-          - name: businessentityid
-            description: Essa é uma chave primária composta da tabela fonte de cabeçalhos de pedidos de vendas.
+            description: Essa é a chave primária composta da tabela fonte de cabeçalhos de pedidos de vendas.
             tests:
               - unique
               - not_null

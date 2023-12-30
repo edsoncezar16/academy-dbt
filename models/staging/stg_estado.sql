@@ -3,6 +3,7 @@ with
         select
             stateprovinceId as ID_ESTADO
             , name as ESTADO
+            , countryregioncode as CODIGO_PAIS
         from {{source('indicium-ae-certification','stateprovince')}}
 )
 
