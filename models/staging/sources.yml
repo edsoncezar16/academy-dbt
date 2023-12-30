@@ -80,3 +80,12 @@ sources:
             tests:
               - unique
               - not_null
+
+      - name: product
+        description: Essa é a tabela de produtos do ERP.
+        columns:
+          - name: productid
+            description: Essa é a chave primária da tabela fonte de produtos.
+            tests:
+              - unique
+              - not_null
