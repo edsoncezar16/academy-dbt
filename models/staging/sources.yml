@@ -65,3 +65,18 @@ sources:
             tests:
               - unique
               - not_null
+
+      - name: salesorderheader
+        description: Essa é a tabela de cabeçalhos de pedidos de vendas do ERP.
+        columns:
+          - name: salesorderid
+            description: Essa é uma chave primária composta da tabela fonte de cabeçalhos de pedidos de vendas.
+            tests:
+              - unique
+              - not_null
+          
+          - name: businessentityid
+            description: Essa é uma chave primária composta da tabela fonte de cabeçalhos de pedidos de vendas.
+            tests:
+              - unique
+              - not_null
