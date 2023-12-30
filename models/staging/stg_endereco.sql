@@ -1,7 +1,9 @@
 with
     source_data as (
         select
-            distinct city as CIDADE
+            addressid as ID_ENDERECO
+            , city as CIDADE
+            , stateprovinceid as ID_ESTADO
         from {{source('indicium-ae-certification','address')}}
 )
 
