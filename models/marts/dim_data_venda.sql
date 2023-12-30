@@ -4,7 +4,7 @@ with
             DATA_VENDA
             , MES
             , ANO
-        from {{ref('stg_data_venda')}}
+        from {{ref('stg_cabecalho_pedido')}}
 )
     , transformed as (
         select

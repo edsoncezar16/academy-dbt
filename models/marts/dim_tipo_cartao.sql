@@ -1,8 +1,8 @@
 with 
     staging as (
         select 
-            TIPO_CARTAO
-        from {{ref('stg_tipo_cartao')}}
+            distinct TIPO_CARTAO
+        from {{ref('stg_cartao')}}
 )
     , transformed as (
         select

@@ -1,8 +1,8 @@
 with 
     staging as (
         select 
-            CIDADE
-        from {{ref('stg_cidade')}}
+            distinct CIDADE
+        from {{ref('stg_endereco')}}
 )
     , transformed as (
         select
