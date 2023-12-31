@@ -11,7 +11,7 @@
 
             {{ default_schema }}
         
-        {%- else custom_schema_name == 'sap_adw' -%}
+        {%- else -%}
 
             {{ custom_schema_name | trim }}
 
