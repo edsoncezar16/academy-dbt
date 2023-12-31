@@ -9,6 +9,9 @@ models:
          - unique
          - not_null
     
+     - name: id_localidade
+       description: A chave natural da localidade (endereço). Necessário para evitar duplicatas na fato.
+    
      - name: cidade
        description: Nome da cidade da localidade.
     

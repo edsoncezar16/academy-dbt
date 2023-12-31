@@ -1,7 +1,8 @@
 with 
     staging as (
-        select 
-            distinct CIDADE
+        select
+            ID_ENDERECO
+            , CIDADE
             , ESTADO
             , PAIS 
         from {{ref('stg_endereco')}}
@@ -10,7 +11,8 @@ with
 )
     , transformed as (
         select
-            row_number() over (order by CIDADE) as SK_LOCALIDADE -- auto-incremental surrogate key
+            row_number() over (order by ID_ENDERECO) as SK_LOCALIDADE -- auto-incremental surrogate key
+            , ID_ENDERECO AS ID_LOCALIDADE
             , CIDADE
             , ESTADO
             , PAIS
