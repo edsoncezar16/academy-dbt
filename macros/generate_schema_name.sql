@@ -11,13 +11,9 @@
 
             {{ default_schema }}
         
-        {%- elif custom_schema_name == 'sap_adw' -%}
+        {%- else custom_schema_name == 'sap_adw' -%}
 
             {{ custom_schema_name | trim }}
-
-        {%- else -%}
-
-            {{ default_schema }}_{{ custom_schema_name | trim }}
 
         {%- endif -%}
     
