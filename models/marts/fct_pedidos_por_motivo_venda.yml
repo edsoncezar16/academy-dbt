@@ -1,7 +1,7 @@
 version: 2
  
 models:
- - name: fct_pedidos
+ - name: fct_pedidos_por_motivo_venda
    columns:
      - name: localidade_fk
        description: A chave estrengeira para a dimensão de localidade.
@@ -38,6 +38,13 @@ models:
              field: data_venda
              to: ref('dim_data_venda')
     
+     - name: motivo_venda_fk
+       description: A chave estrangeira para dimensão de motivo de venda.
+       tests:
+         - relationships:
+             field: sk_motivo_venda
+             to: ref('dim_motivo_venda')
+
      - name: numero_pedidos
        description: Quantidade de pedidos.
        tests: 

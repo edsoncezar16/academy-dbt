@@ -58,6 +58,18 @@ endereco as (
     FROM {{ref('stg_endereco')}}
 ),
 
+bridge_pedidos_motivo_venda as (
+    select
+      *
+    FROM {{ref('stg_pedidos_motivo_venda')}}
+),
+
+motivo_venda as (
+    select
+      *
+    FROM {{ref('dim_motivo_venda')}}
+),
+
 total_info as (
     select
         detalhes_pedido.ID_VENDA
@@ -70,6 +82,7 @@ total_info as (
         , cliente.SK_CLIENTE
         , produto.SK_PRODUTO
         , tipo_cartao.SK_TIPO_CARTAO
+        , motivo_venda.SK_MOTIVO_VENDA
     FROM detalhes_pedido
     LEFT JOIN cabecalho_pedido on cabecalho_pedido.ID_VENDA = detalhes_pedido.ID_VENDA
     LEFT JOIN cartao on cabecalho_pedido.ID_CARTAO = cartao.ID_CARTAO
@@ -78,6 +91,8 @@ total_info as (
     LEFT JOIN localidade on endereco.CIDADE = localidade.CIDADE
     LEFT JOIN cliente on cabecalho_pedido.ID_CLIENTE = cliente.ID_CLIENTE
     LEFT JOIN produto on detalhes_pedido.ID_PRODUTO = produto.ID_PRODUTO
+    LEFT JOIN bridge_pedidos_motivo_venda on bridge_pedidos_motivo_venda.ID_VENDA = detalhes_pedido.ID_VENDA
+    LEFT JOIN motivo_venda on motivo_venda.ID_MOTIVO_VENDA = bridge_pedidos_motivo_venda.ID_MOTIVO_VENDA
 ),
 
 computa_metricas as (
@@ -87,12 +102,13 @@ computa_metricas as (
         , SK_PRODUTO as PRODUTO_FK
         , SK_TIPO_CARTAO as TIPO_CARTAO_FK
         , DATA_VENDA
+        , SK_MOTIVO_VENDA as MOTIVO_VENDA_FK
         , count( distinct ID_VENDA) as NUMERO_PEDIDOS
         , sum( QUANTIDADE_COMPRADA ) as QUANTIDADE_TOTAL_COMPRADA
         , sum( QUANTIDADE_COMPRADA * PRECO_UNITARIO ) as VALOR_TOTAL_BRUTO
         , sum( QUANTIDADE_COMPRADA * PRECO_UNITARIO * (1.0 - DESCONTO_PERCENTUAL_UNITARIO) ) as VALOR_TOTAL_LIQUIDO
     FROM total_info
-    GROUP BY SK_LOCALIDADE, SK_CLIENTE, SK_PRODUTO, SK_TIPO_CARTAO, DATA_VENDA
+    GROUP BY SK_LOCALIDADE, SK_CLIENTE, SK_PRODUTO, SK_TIPO_CARTAO, DATA_VENDA, SK_MOTIVO_VENDA
 )
 
 select * from computa_metricas

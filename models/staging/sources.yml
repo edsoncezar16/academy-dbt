@@ -88,6 +88,13 @@ sources:
             tests:
               - unique
               - not_null
+      
+          - name: creditcardid
+            description: Essa é a chave estrangeira da tabela fonte de cabeçalhos de pedidos de vendas para a tabela de cartões.
+            tests:
+              - relationships:
+                  field: creditcardid
+                  to: source('indicium-ae-certification', 'creditcard')
 
       - name: salesorderdetail
         description: Essa é a tabela de detalhamento de pedidos de vendas do ERP.
@@ -123,3 +130,22 @@ sources:
             tests:
               - unique
               - not_null
+      
+      - name: salesorderheadersalesreason
+        description: Esta é a tabela de junção (muitos para muitos) entre cabeçalho de peidos e motivos de vendas.
+        columns:
+          - name: salesorderid
+            description: Esta é uma chave primária composta desta tabela de ligação e a chave estrangeira para a tabela de cabeçalhos de pedidos.
+            tests:
+              - not_null
+              - relationships:
+                  field: salesorderid
+                  to: source('indicium-ae-certification', 'salesorderheader')
+           
+          - name: salesreasonid 
+            description: Esta é uma chave primária composta desta tabela de ligação e a chave estrangeira para a tabela de motivos de venda.
+            tests:
+              - not_null
+              - relationships:
+                  field: salesreasonid
+                  to: source('indicium-ae-certification', 'salesreason')
