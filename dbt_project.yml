@@ -36,6 +36,10 @@ models:
     
     marts:
       materialized: table
+      schema: marts
+    
+    staging:
+      schema: stg
 
 
 seeds:

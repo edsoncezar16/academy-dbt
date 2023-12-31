@@ -1,7 +1,8 @@
 with
     source_data as (
         select
-            distinct cardtype as  TIPO_CARTAO
+            creditcardid as ID_CARTAO
+            , cardtype as  TIPO_CARTAO
         from {{source('indicium-ae-certification','creditcard')}}
 )
 
