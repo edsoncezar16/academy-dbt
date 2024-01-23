@@ -6,8 +6,8 @@ with
             , ESTADO
             , PAIS 
         from {{ref('stg_endereco')}}
-        left join {{ref('stg_estado')}} on stg_endereco.ID_ESTADO = stg_estado.ID_ESTADO
-        left join {{ref('stg_pais')}} on stg_estado.CODIGO_PAIS = stg_pais.CODIGO_PAIS
+        left join {{ref('stg_estado')}} using (ID_ESTADO)
+        left join {{ref('stg_pais')}} using (CODIGO_PAIS)
 )
     , transformed as (
         select

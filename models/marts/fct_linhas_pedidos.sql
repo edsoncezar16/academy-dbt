@@ -35,9 +35,9 @@ cabecalho_pedido_com_sk as (
             , data.DATA_VENDA
         FROM {{ref('stg_cabecalho_pedido')}} scp
         LEFT JOIN localidade on localidade.ID_LOCALIDADE = scp.ID_ENDERECO_FATURA
-        LEFT JOIN cliente using ID_CLIENTE
-        LEFT JOIN cartao using ID_CARTAO
-        LEFT JOIN data using DATA_VENDA
+        LEFT JOIN cliente using (ID_CLIENTE)
+        LEFT JOIN cartao using (ID_CARTAO)
+        LEFT JOIN data using (DATA_VENDA)
 ), 
 
 produto as (
@@ -56,7 +56,7 @@ detalhes_pedido_com_sk as (
             , PRECO_UNITARIO
             , DESCONTO_PERCENTUAL_UNITARIO
         FROM {{ref('stg_detalhamento_pedido')}} sdp
-        LEFT JOIN produto using ID_PRODUTO
+        LEFT JOIN produto using (ID_PRODUTO)
 ),
 
 final as (
@@ -71,7 +71,7 @@ final as (
         , PRECO_UNITARIO * QUANTIDADE_COMPRADA as VENDAS_BRUTAS
         , PRECO_UNITARIO * QUANTIDADE_COMPRADA * (1.0 - DESCONTO_PERCENTUAL_UNITARIO) as VENDAS_LIQUIDAS
     FROM detalhes_pedido_com_sk
-    LEFT JOIN cabecalho_pedido_com_sk using ID_VENDA
+    LEFT JOIN cabecalho_pedido_com_sk using (ID_VENDA)
 )
 
 select * from final
