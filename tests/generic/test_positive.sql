@@ -16,7 +16,7 @@ validation_errors as (
 
     from validation
     -- if this is true, then positive_field is actually not positive!
-    where not_negative_field <= 0
+    where positive_field <= 0
 
 )
 
