@@ -1,8 +1,8 @@
 with
     source_data as (
         select
-          salesorderid as ID_VENDA
-          , salesreasonid as ID_MOTIVO_VENDA
+          cast(salesorderid as int) as ID_VENDA
+          , cast(salesreasonid as int) as ID_MOTIVO_VENDA
         FROM {{source('indicium-ae-certification', 'salesorderheadersalesreason')}}
     )
 

@@ -1,8 +1,8 @@
 with
     source_data as (
         select
-            countryregioncode as CODIGO_PAIS
-            , name as PAIS
+            cast(countryregioncode as string) as CODIGO_PAIS
+            , cast(name as string) as PAIS
         from {{source('indicium-ae-certification','countryregion')}}
 )
 
