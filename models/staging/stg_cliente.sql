@@ -1,8 +1,8 @@
 with
     source_data as (
         select
-            customerId as ID_CLIENTE
-            , personId as ID_PESSOA
+            cast(customerId as int) as ID_CLIENTE
+            , cast(personId as int) as ID_PESSOA
         from {{source('indicium-ae-certification','customer')}}
 )
 

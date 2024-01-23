@@ -1,7 +1,7 @@
 with
     source_data as (
         select
-            businessentityId as ID_ENTIDADE_NEGOCIO
+            cast(businessentityId as int) as ID_ENTIDADE_NEGOCIO
             , concat(
                 coalesce(title, ''), ' '
                 , coalesce(firstname, ''), ' '

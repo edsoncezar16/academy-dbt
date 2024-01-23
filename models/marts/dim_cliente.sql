@@ -4,7 +4,7 @@ with
             stg_cliente.ID_CLIENTE,
             stg_pessoa.NOME_COMPLETO
         from {{ref('stg_cliente')}}
-        left join {{ref('stg_pessoa')}}
+        LEFT JOIN {{ref('stg_pessoa')}}
         on stg_pessoa.ID_ENTIDADE_NEGOCIO = stg_cliente.ID_PESSOA
 )
     , transformed as (

@@ -1,0 +1,32 @@
+version: 2
+ 
+models:
+ - name: stg_detalhamento_pedido
+   columns:
+     - name: id_venda
+       description: Código identificador do pedido.
+       tests:
+         - not_null
+    
+     - name: id_produto
+       description: Código identificador do produto associado à linha de pedido.
+       tests:
+         - not_null
+    
+     - name: quantidade_comprada
+       description: Número de unidades compradas do produto.
+       tests:
+         - not_null
+         - positive
+    
+     - name: preco_unitario
+       description: Preço de uma única unidade do produto.
+       tests:
+         - not_null
+         - positive
+
+     - name: desconto_percentual_unitario
+       description: Desconto aplicado a uma única unidade do produto.
+       tests:
+         - not_null
+         - not_negative
