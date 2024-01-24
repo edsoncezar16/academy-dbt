@@ -7,8 +7,8 @@ with
     , transformed as (
         select
            *
-           , format_date('%m', DATA_VENDA) as MES
-           , format_date('%Y', DATA_VENDA) as ANO
+           , extract(month from DATA_VENDA) as MES
+           , extract(year from DATA_VENDA) as ANO
         from staging
 )
 
