@@ -3,6 +3,13 @@ version: 2
 models:
  - name: stg_detalhamento_pedido
    columns:
+     - name: id_detalhamento_pedido
+       description: Código identificador do detalhamento de pedido.
+       tests:
+         - not_null
+         - unique
+         
+
      - name: id_venda
        description: Código identificador do pedido.
        tests:

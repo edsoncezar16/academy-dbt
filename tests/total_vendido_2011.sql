@@ -3,7 +3,7 @@
 with
    vendas_2011 as (
        SELECT
-           sum(VENDAS_BRUTAS) as total
+           sum(VENDAS_BRUTAS_ALOCADAS_POR_MOTIVO) as total
        FROM {{ ref ('fct_linhas_pedidos') }}
        where extract(year from DATA_VENDA) = 2011
    )
