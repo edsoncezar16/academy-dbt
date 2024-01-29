@@ -50,7 +50,8 @@ produto as (
 
 detalhes_pedido_com_sk as (
         select
-            ID_VENDA
+            ID_DETALHAMENTO_PEDIDO
+            , ID_VENDA
             , produto.SK_PRODUTO as FK_PRODUTO
             , QUANTIDADE_COMPRADA
             , PRECO_UNITARIO
@@ -58,6 +59,19 @@ detalhes_pedido_com_sk as (
         FROM {{ref('stg_detalhamento_pedido')}} sdp
         LEFT JOIN produto using (ID_PRODUTO)
 ),
+
+bridge as (
+    select 
+        ID_VENDA
+        , SK_MOTIVO_VENDA
+    FROM {{ref('bridge_pedidos_motivo_venda')}}
+),
+
+motivo as (
+    select
+        SK_MOTIVO_VENDA
+    FROM {{ref('dim_motivo_venda')}}
+), 
 
 final as (
     select
@@ -67,11 +81,14 @@ final as (
         , FK_LOCALIDADE
         , FK_CLIENTE
         , FK_CARTAO
-        , QUANTIDADE_COMPRADA
-        , PRECO_UNITARIO * QUANTIDADE_COMPRADA as VENDAS_BRUTAS
-        , PRECO_UNITARIO * QUANTIDADE_COMPRADA * (1.0 - DESCONTO_PERCENTUAL_UNITARIO) as VENDAS_LIQUIDAS
+        , motivo.SK_MOTIVO_VENDA as FK_MOTIVO_VENDA
+        , QUANTIDADE_COMPRADA / count(*) over (partition by ID_DETALHAMENTO_PEDIDO) as QUANTIDADE_COMPRADA_ALOCADA_POR_MOTIVO
+        , PRECO_UNITARIO * QUANTIDADE_COMPRADA / count(*) over (partition by ID_DETALHAMENTO_PEDIDO) as VENDAS_BRUTAS_ALOCADAS_POR_MOTIVO
+        , PRECO_UNITARIO * QUANTIDADE_COMPRADA * (1.0 - DESCONTO_PERCENTUAL_UNITARIO) / count(*) over (partition by ID_DETALHAMENTO_PEDIDO) as VENDAS_LIQUIDAS_ALOCADAS_POR_MOTIVO
     FROM detalhes_pedido_com_sk
     LEFT JOIN cabecalho_pedido_com_sk using (ID_VENDA)
+    LEFT JOIN bridge using (ID_VENDA)
+    LEFT JOIN motivo using (SK_MOTIVO_VENDA)
 )
 
 select * from final

@@ -1,7 +1,8 @@
 with
     source_data as (
         select
-            cast(salesorderid as int) as ID_VENDA
+            cast(salesorderdetailid as int) as ID_DETALHAMENTO_PEDIDO
+            , cast(salesorderid as int) as ID_VENDA
             , cast(productid as int) as ID_PRODUTO
             , cast(orderqty as int) as QUANTIDADE_COMPRADA
             , cast(unitprice as float64) as PRECO_UNITARIO
