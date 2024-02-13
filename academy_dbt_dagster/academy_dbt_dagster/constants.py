@@ -19,3 +19,5 @@ if os.getenv("DAGSTER_DBT_PARSE_PROJECT_ON_LOAD"):
     )
 else:
     dbt_manifest_path = dbt_project_dir.joinpath("target", "manifest.json")
+
+meltano_project_dir = Path(__file__).joinpath("..", "..", "meltano_el").resolve()
