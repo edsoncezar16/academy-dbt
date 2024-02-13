@@ -1,18 +1,19 @@
-with 
-    staging as (
-        select 
-            stg_cliente.ID_CLIENTE,
-            stg_pessoa.NOME_COMPLETO
-        from {{ref('stg_cliente')}}
-        LEFT JOIN {{ref('stg_pessoa')}}
-        on stg_pessoa.ID_ENTIDADE_NEGOCIO = stg_cliente.ID_PESSOA
-)
-    , transformed as (
-        select
-            row_number() over (order by ID_CLIENTE) as SK_CLIENTE -- auto-incremental surrogate key
-            , ID_CLIENTE
-            , NOME_COMPLETO
-        from staging
+with
+staging as (
+    select
+        stg_cliente.id_cliente,
+        stg_pessoa.nome_completo
+    from {{ ref('stg_cliente') }}
+    left join {{ ref('stg_pessoa') }}
+        on stg_cliente.id_pessoa = stg_pessoa.id_entidade_negocio
+),
+
+transformed as (
+    select
+        id_cliente,
+        nome_completo,
+        row_number() over (order by id_cliente) as sk_cliente -- auto-incremental surrogate key
+    from staging
 )
 
-select *  from transformed
+select * from transformed

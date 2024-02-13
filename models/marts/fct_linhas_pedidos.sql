@@ -1,94 +1,105 @@
+-- Configure the model as incremental
+{{ config(materialized='incremental') }}
+
 with localidade as (
-   select
-     SK_LOCALIDADE,
-     ID_LOCALIDADE
-   FROM {{ref('dim_localidade')}}   
+    select
+        sk_localidade,
+        id_localidade
+    from {{ ref('dim_localidade') }}
 ),
 
 cliente as (
-   select
-     SK_CLIENTE
-     , ID_CLIENTE
-   FROM {{ref('dim_cliente')}}   
+    select
+        sk_cliente,
+        id_cliente
+    from {{ ref('dim_cliente') }}
 ),
- 
+
 cartao as (
     select
-        SK_CARTAO
-        , ID_CARTAO
-    FROM {{ref('dim_cartao')}}
-), 
+        sk_cartao,
+        id_cartao
+    from {{ ref('dim_cartao') }}
+),
 
 data as (
-    select
-        DATA_VENDA
-    FROM {{ref('dim_data_venda')}}
-), 
-
-
-cabecalho_pedido_com_sk as (
-        select
-            ID_VENDA                        
-            , localidade.SK_LOCALIDADE as FK_LOCALIDADE
-            , cliente.SK_CLIENTE as FK_CLIENTE
-            , cartao.SK_CARTAO as FK_CARTAO
-            , data.DATA_VENDA
-        FROM {{ref('stg_cabecalho_pedido')}} scp
-        LEFT JOIN localidade on localidade.ID_LOCALIDADE = scp.ID_ENDERECO_FATURA
-        LEFT JOIN cliente using (ID_CLIENTE)
-        LEFT JOIN cartao using (ID_CARTAO)
-        LEFT JOIN data using (DATA_VENDA)
-), 
+    select data_venda
+    from {{ ref('dim_data_venda') }}
+),
 
 produto as (
-   select
-     SK_PRODUTO
-   , ID_PRODUTO
-   FROM {{ref('dim_produto')}}   
+    select
+        sk_produto,
+        id_produto
+    from {{ ref('dim_produto') }}
 ),
 
 
 detalhes_pedido_com_sk as (
-        select
-            ID_DETALHAMENTO_PEDIDO
-            , ID_VENDA
-            , produto.SK_PRODUTO as FK_PRODUTO
-            , QUANTIDADE_COMPRADA
-            , PRECO_UNITARIO
-            , DESCONTO_PERCENTUAL_UNITARIO
-        FROM {{ref('stg_detalhamento_pedido')}} sdp
-        LEFT JOIN produto using (ID_PRODUTO)
+    select
+        sdp.id_detalhamento_pedido,
+        sdp.id_venda,
+        produto.sk_produto as fk_produto,
+        sdp.quantidade_comprada,
+        sdp.preco_unitario,
+        sdp.desconto_percentual_unitario
+    from {{ ref('stg_detalhamento_pedido') }} as sdp
+    left join produto on sdp.id_produto = produto.id_produto
+),
+
+
+cabecalho_pedido_com_sk as (
+    select
+        scp.id_venda,
+        localidade.sk_localidade as fk_localidade,
+        cliente.sk_cliente as fk_cliente,
+        cartao.sk_cartao as fk_cartao,
+        data.data_venda
+    from {{ ref('stg_cabecalho_pedido') }} as scp
+    left join localidade on scp.id_endereco_fatura = localidade.id_localidade
+    left join cliente on scp.id_cliente = cliente.id_cliente
+    left join cartao on scp.id_cartao = cartao.id_cartao
+    left join data on scp.data_venda = data.data_venda
 ),
 
 bridge as (
-    select 
-        ID_VENDA
-        , SK_MOTIVO_VENDA
-    FROM {{ref('bridge_pedidos_motivo_venda')}}
+    select
+        id_venda,
+        sk_motivo_venda
+    from {{ ref('bridge_pedidos_motivo_venda') }}
 ),
 
 motivo as (
-    select
-        SK_MOTIVO_VENDA
-    FROM {{ref('dim_motivo_venda')}}
-), 
+    select sk_motivo_venda
+    from {{ ref('dim_motivo_venda') }}
+),
 
 final as (
     select
-        detalhes_pedido_com_sk.ID_VENDA
-        , DATA_VENDA
-        , FK_PRODUTO
-        , FK_LOCALIDADE
-        , FK_CLIENTE
-        , FK_CARTAO
-        , motivo.SK_MOTIVO_VENDA as FK_MOTIVO_VENDA
-        , QUANTIDADE_COMPRADA / count(*) over (partition by ID_DETALHAMENTO_PEDIDO) as QUANTIDADE_COMPRADA_ALOCADA_POR_MOTIVO
-        , PRECO_UNITARIO * QUANTIDADE_COMPRADA / count(*) over (partition by ID_DETALHAMENTO_PEDIDO) as VENDAS_BRUTAS_ALOCADAS_POR_MOTIVO
-        , PRECO_UNITARIO * QUANTIDADE_COMPRADA * (1.0 - DESCONTO_PERCENTUAL_UNITARIO) / count(*) over (partition by ID_DETALHAMENTO_PEDIDO) as VENDAS_LIQUIDAS_ALOCADAS_POR_MOTIVO
-    FROM detalhes_pedido_com_sk
-    LEFT JOIN cabecalho_pedido_com_sk using (ID_VENDA)
-    LEFT JOIN bridge using (ID_VENDA)
-    LEFT JOIN motivo using (SK_MOTIVO_VENDA)
+        dps.id_venda,
+        dps.data_venda,
+        dps.fk_produto,
+        dps.fk_localidade,
+        dps.fk_cliente,
+        dps.fk_cartao,
+        motivo.sk_motivo_venda as fk_motivo_venda,
+        dps.quantidade_comprada
+        / count(*) over (partition by dps.id_detalhamento_pedido) as quantidade_comprada_alocada_por_motivo,
+        dps.preco_unitario
+        * dps.quantidade_comprada
+        / count(*) over (partition by dps.id_detalhamento_pedido) as vendas_brutas_alocadas_por_motivo,
+        dps.preco_unitario
+        * dps.quantidade_comprada
+        * (1.0 - dps.desconto_percentual_unitario)
+        / count(*) over (partition by dps.id_detalhamento_pedido) as vendas_liquidas_alocadas_por_motivo
+    from detalhes_pedido_com_sk as dps
+    left join cabecalho_pedido_com_sk as cps on dps.id_venda = cps.id_venda
+    left join bridge on dps.id_venda = bridge.id_venda
+    left join motivo on dps.id_venda = motivo.sk_motivo_venda
 )
 
 select * from final
+-- Use the Dagster partition variables to filter rows on an incremental run
+{% if is_incremental() %}
+    where data_venda >= '{{ var('min_date') }}' and data_venda <= '{{ var('max_date') }}'
+{% endif %}

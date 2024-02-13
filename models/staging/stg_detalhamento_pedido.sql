@@ -1,15 +1,14 @@
 with
-    source_data as (
-        select
-            cast(salesorderdetailid as int) as ID_DETALHAMENTO_PEDIDO
-            , cast(salesorderid as int) as ID_VENDA
-            , cast(productid as int) as ID_PRODUTO
-            , cast(orderqty as int) as QUANTIDADE_COMPRADA
-            , cast(unitprice as float64) as PRECO_UNITARIO
-            , cast(unitpricediscount as float64) as DESCONTO_PERCENTUAL_UNITARIO
-        from {{source('indicium-ae-certification','salesorderdetail')}}
+source_data as (
+    select
+        cast(salesorderdetailid as int) as id_detalhamento_pedido,
+        cast(salesorderid as int) as id_venda,
+        cast(productid as int) as id_produto,
+        cast(orderqty as int) as quantidade_comprada,
+        cast(unitprice as float64) as preco_unitario,
+        cast(unitpricediscount as float64) as desconto_percentual_unitario
+    from {{ source('indicium-ae-certification','salesorderdetail') }}
 )
 
-select 
-    *
+select *
 from source_data

@@ -1,16 +1,17 @@
-with 
-    staging as (
-        select 
-            ID_PRODUTO
-            , PRODUTO
-        from {{ref('stg_produto')}}
-)
-    , transformed as (
-        select
-            row_number() over (order by ID_PRODUTO) as SK_PRODUTO -- auto-incremental surrogate key
-            , ID_PRODUTO
-            , PRODUTO
-        from staging
+with
+staging as (
+    select
+        id_produto,
+        produto
+    from {{ ref('stg_produto') }}
+),
+
+transformed as (
+    select
+        id_produto,
+        produto,
+        row_number() over (order by id_produto) as sk_produto -- auto-incremental surrogate key
+    from staging
 )
 
-select *  from transformed
+select * from transformed

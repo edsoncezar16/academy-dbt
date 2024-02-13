@@ -1,9 +1,9 @@
 with
-    source_data as (
-        select
-            cast(salesreasonId as int) as ID_MOTIVO_VENDA
-            , cast(name as string) as MOTIVO_VENDA
-        from {{source('indicium-ae-certification','salesreason')}}
+source_data as (
+    select
+        cast(salesreasonid as int) as id_motivo_venda,
+        cast(name as string) as motivo_venda
+    from {{ source('indicium-ae-certification','salesreason') }}
 )
 
 select *
