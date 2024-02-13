@@ -1,4 +1,4 @@
-from dagster import AssetExecutionContext
+from dagster import AssetExecutionContext, DailyPartitionsDefinition
 from dagster_dbt import (
     DbtCliResource,
     dbt_assets,
@@ -9,6 +9,7 @@ from dagster_dbt import (
 from .constants import dbt_manifest_path
 
 from typing import Mapping, Any, Optional
+import json
 
 
 class CustomDagsterDbtTranslator(
@@ -24,9 +25,14 @@ class CustomDagsterDbtTranslator(
 
 
 @dbt_assets(
-    manifest=dbt_manifest_path, dagster_dbt_translator=CustomDagsterDbtTranslator()
+    manifest=dbt_manifest_path,
+    dagster_dbt_translator=CustomDagsterDbtTranslator(),
+    partitions_def=DailyPartitionsDefinition(start_date="2011-01-01"),
 )
 def indicium_ae_certification_dbt_assets(
     context: AssetExecutionContext, dbt: DbtCliResource
 ):
-    yield from dbt.cli(["build"], context=context).stream()
+    start, end = context.partition_time_window
+    dbt_vars = {"min_date": start.isoformat(), "max_date": end.isoformat()}
+    dbt_build_args = ["build", "--vars", json.dumps(dbt_vars)]
+    yield from dbt.cli(dbt_build_args, context=context).stream()

@@ -1,15 +1,15 @@
-with 
-    staging as (
-        select 
-            distinct DATA_VENDA
-        from {{ref('stg_cabecalho_pedido')}}
-)
-    , transformed as (
-        select
-           *
-           , extract(month from DATA_VENDA) as MES
-           , extract(year from DATA_VENDA) as ANO
-        from staging
+with
+staging as (
+    select distinct data_venda
+    from {{ ref('stg_cabecalho_pedido') }}
+),
+
+transformed as (
+    select
+        *,
+        extract(month from data_venda) as mes,
+        extract(year from data_venda) as ano
+    from staging
 )
 
-select *  from transformed
+select * from transformed

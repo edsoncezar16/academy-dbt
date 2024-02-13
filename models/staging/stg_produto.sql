@@ -1,9 +1,9 @@
 with
-    source_data as (
-        select
-            cast(productid as int) as ID_PRODUTO
-            , cast(name as string) as PRODUTO
-        from {{source('indicium-ae-certification','product')}}
+source_data as (
+    select
+        cast(productid as int) as id_produto,
+        cast(name as string) as produto
+    from {{ source('indicium-ae-certification','product') }}
 )
 
 select *

@@ -1,9 +1,9 @@
 with
-    source_data as (
-        select
-            cast(customerId as int) as ID_CLIENTE
-            , cast(personId as int) as ID_PESSOA
-        from {{source('indicium-ae-certification','customer')}}
+source_data as (
+    select
+        cast(customerid as int) as id_cliente,
+        cast(personid as int) as id_pessoa
+    from {{ source('indicium-ae-certification','customer') }}
 )
 
 select *

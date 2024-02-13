@@ -1,10 +1,10 @@
 with
-    staging as (
-        select
-         stg.ID_VENDA
-         , dim.SK_MOTIVO_VENDA
-        FROM {{ref('stg_pedidos_motivo_venda')}} stg
-        LEFT JOIN {{ref('dim_motivo_venda')}} dim using (ID_MOTIVO_VENDA)
-    )
+staging as (
+    select
+        stg.id_venda,
+        dim.sk_motivo_venda
+    from {{ ref('stg_pedidos_motivo_venda') }} as stg
+    left join {{ ref('dim_motivo_venda') }} as dim on stg.id_motivo_venda = dim.id_motivo_venda
+)
 
 select * from staging
