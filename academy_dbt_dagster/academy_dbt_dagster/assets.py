@@ -13,10 +13,9 @@ import json
 
 
 class CustomDagsterDbtTranslator(
-    DagsterDbtTranslator(
-        settings=DagsterDbtTranslatorSettings(enable_asset_checks=True)
-    )
+    DagsterDbtTranslator
 ):
+    _settings = DagsterDbtTranslatorSettings(enable_asset_checks=True)
     def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
         """
         Sets dagster asset group as dbt model schema.
@@ -27,7 +26,7 @@ class CustomDagsterDbtTranslator(
 @dbt_assets(
     manifest=dbt_manifest_path,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
-    partitions_def=DailyPartitionsDefinition(start_date="2011-01-01"),
+    partitions_def=DailyPartitionsDefinition(start_date="2011-05-31", end_date="2014-06-30"),
 )
 def indicium_ae_certification_dbt_assets(
     context: AssetExecutionContext, dbt: DbtCliResource
