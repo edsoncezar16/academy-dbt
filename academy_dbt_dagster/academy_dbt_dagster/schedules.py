@@ -10,7 +10,7 @@ schedules = [
     build_schedule_from_dbt_selection(
         [indicium_ae_certification_dbt_assets],
         job_name="materialize_dbt_models",
-        cron_schedule="0 0 * * *",
+        cron_schedule="0 1 * * 1-5",
         dbt_select="fqn:*",
     ),
 ]
