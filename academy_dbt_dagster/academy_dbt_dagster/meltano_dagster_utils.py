@@ -27,6 +27,8 @@ def get_catalog(tap_name: str, meltano: MeltanoResource) -> list[Mapping[str, An
         )
         return catalog.get("streams", [])
     except ValueError as e:
+        with open(meltano.project_dir + "/error.txt", "w") as error_file:
+            error_file.write(e)
         print(f"Error generating catalog for plugin 'tap-{tap_name}'. {e}")
         return []
 

@@ -6,6 +6,10 @@ name: 'indicium_ae_certification' # <-- Name of the project.
 version: '1.0.0'
 config-version: 2
 
+vars:
+  min_date: '2011-05-31'
+  max_date: '2014-07-01'
+
 # This setting configures which "profile" dbt uses for this project.
 profile: 'default'
 
