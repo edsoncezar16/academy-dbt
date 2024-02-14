@@ -80,7 +80,7 @@ def meltano_dagster_factory(meltano: MeltanoResource) -> list[Any]:
             },
         )
         def compute(context: OpExecutionContext):
-            command = f"run tap-{context.op.name} target-postgres"
+            command = f"run tap-{context.op.name} target-bigquery"
             meltano = context.resources.get("meltano")
             if meltano:
                 meltano.execute_command(f"{command}", dict(), context.log)
