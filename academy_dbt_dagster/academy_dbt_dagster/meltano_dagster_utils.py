@@ -1,5 +1,5 @@
 import yaml
-import json
+import asyncio
 
 from dagster import (
     ScheduleDefinition,
