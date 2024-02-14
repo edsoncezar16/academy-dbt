@@ -23,7 +23,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "sales_customer"
+              - sales_customer
 
       - name: person
         description: Essa é a tabela de pessoas do ERP.
@@ -36,7 +36,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "person_person"
+              - person_person
 
       - name: salesreason
         description: Essa é a tabela de motivo de vendas do ERP.
@@ -49,7 +49,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "sales_salesreason"
+              - sales_salesreason
 
 
       - name: stateprovince
@@ -70,7 +70,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "person_stateprovince"
+              - person_stateprovince
 
 
       - name: address
@@ -91,7 +91,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "person_address"
+              - person_address
 
 
       - name: countryregion
@@ -105,7 +105,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "person_countryregion"
+              - person_countryregion
 
 
       - name: salesorderheader
@@ -126,7 +126,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "sales_salesorderheader"
+              - sales_salesorderheader
 
 
       - name: salesorderdetail
@@ -147,7 +147,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "sales_salesorderdetail"
+              - sales_salesorderdetail
 
 
       - name: product
@@ -161,7 +161,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "production_product"
+              - production_product
 
 
       - name: creditcard
@@ -175,7 +175,7 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "sales_creditcard"
+              - sales_creditcard
 
 
       - name: salesorderheadersalesreason
@@ -199,5 +199,5 @@ sources:
         meta:
           dagster:
             asset_key:
-              - "sales_salesorderheadersalesreason"
+              - sales_salesorderheadersalesreason
 

@@ -10,7 +10,6 @@ from .constants import dbt_manifest_path, meltano_project_dir
 
 from typing import Mapping, Any, Optional
 import json
-import yaml
 
 
 class CustomDagsterDbtTranslator(DagsterDbtTranslator):
@@ -25,7 +24,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
 @dbt_assets(
     manifest=dbt_manifest_path,
-    exclude="resource_type:seed",
+    exclude="resource_type:seed resource_type:source",
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
     partitions_def=DailyPartitionsDefinition(
         start_date="2011-05-31", end_date="2014-07-01"
