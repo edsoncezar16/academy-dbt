@@ -1,5 +1,5 @@
 import yaml
-import asyncio
+import json
 
 from dagster import (
     ScheduleDefinition,
@@ -22,11 +22,9 @@ def get_catalog(tap_name: str, meltano: MeltanoResource) -> list[Mapping[str, An
     tap_name is the name after the 'tap-' prefix, e.g, for tap-postgres we have tap_name='postgres'.
     """
     try:
-        catalog = asyncio.run(
-            meltano.load_json_from_cli(["invoke", "--dump=catalog", f"tap-{tap_name}"])
-        )
-        return catalog.get("streams", [])
-    except ValueError as e:
+        catalog = json.loads(meltano.execute_command(f"invoke --dump=catalog tap-{tap_name}", env={}))
+        return catalog.get("streams")
+    except Exception as e:
         print(f"Error generating catalog for plugin 'tap-{tap_name}'. {e}")
         return []
 
