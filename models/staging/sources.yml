@@ -13,13 +13,17 @@ sources:
             tests:
               - unique
               - not_null
-          
+
           - name: personid
             description: Essa é a chave estrangeira da tabela fonte de clientes para a tabela fonte de pessoas.
             tests:
               - relationships:
-                 field: businessentityid
-                 to: source('indicium-ae-certification', 'person')
+                  field: businessentityid
+                  to: source('indicium-ae-certification', 'person')
+        meta:
+          dagster:
+            asset_key:
+              - "sales_customer"
 
       - name: person
         description: Essa é a tabela de pessoas do ERP.
@@ -29,7 +33,11 @@ sources:
             tests:
               - unique
               - not_null
-      
+        meta:
+          dagster:
+            asset_key:
+              - "person_person"
+
       - name: salesreason
         description: Essa é a tabela de motivo de vendas do ERP.
         columns:
@@ -38,6 +46,11 @@ sources:
             tests:
               - unique
               - not_null
+        meta:
+          dagster:
+            asset_key:
+              - "sales_salesreason"
+
 
       - name: stateprovince
         description: Essa é a tabela de estados do ERP.
@@ -47,13 +60,18 @@ sources:
             tests:
               - unique
               - not_null
-          
+
           - name: countryregioncode
             description: Essa é a chave estrangeira da tabela fonte de estados para a tabela de países.
             tests:
               - relationships:
                   field: countryregioncode
                   to: source('indicium-ae-certification', 'countryregion')
+        meta:
+          dagster:
+            asset_key:
+              - "person_stateprovince"
+
 
       - name: address
         description: Essa é a tabela de endereços do ERP.
@@ -63,13 +81,18 @@ sources:
             tests:
               - unique
               - not_null
-          
+
           - name: stateprovinceid
             description: Essa é a chave estrangeira da tabela fonte de endereços para a tabela de estados.
             tests:
               - relationships:
                   field: stateprovinceid
                   to: source('indicium-ae-certification', 'stateprovince')
+        meta:
+          dagster:
+            asset_key:
+              - "person_address"
+
 
       - name: countryregion
         description: Essa é a tabela de países do ERP.
@@ -79,6 +102,11 @@ sources:
             tests:
               - unique
               - not_null
+        meta:
+          dagster:
+            asset_key:
+              - "person_countryregion"
+
 
       - name: salesorderheader
         description: Essa é a tabela de cabeçalhos de pedidos de vendas do ERP.
@@ -88,13 +116,18 @@ sources:
             tests:
               - unique
               - not_null
-      
+
           - name: creditcardid
             description: Essa é a chave estrangeira da tabela fonte de cabeçalhos de pedidos de vendas para a tabela de cartões.
             tests:
               - relationships:
                   field: creditcardid
                   to: source('indicium-ae-certification', 'creditcard')
+        meta:
+          dagster:
+            asset_key:
+              - "sales_salesorderheader"
+
 
       - name: salesorderdetail
         description: Essa é a tabela de detalhamento de pedidos de vendas do ERP.
@@ -104,13 +137,18 @@ sources:
             tests:
               - unique
               - not_null
-          
+
           - name: salesorderid
             description: Essa é a chave estrangeira da tabela fonte de detalhamento de pedidos de vendas para a de cabeçalho de vendas.
             tests:
               - relationships:
                   field: salesorderid
                   to: source('indicium-ae-certification', 'salesorderheader')
+        meta:
+          dagster:
+            asset_key:
+              - "sales_salesorderdetail"
+
 
       - name: product
         description: Essa é a tabela de produtos do ERP.
@@ -120,6 +158,10 @@ sources:
             tests:
               - unique
               - not_null
+        meta:
+          dagster:
+            asset_key:
+              - "production_product"
 
 
       - name: creditcard
@@ -130,7 +172,12 @@ sources:
             tests:
               - unique
               - not_null
-      
+        meta:
+          dagster:
+            asset_key:
+              - "sales_creditcard"
+
+
       - name: salesorderheadersalesreason
         description: Esta é a tabela de junção (muitos para muitos) entre cabeçalho de peidos e motivos de vendas.
         columns:
@@ -141,11 +188,16 @@ sources:
               - relationships:
                   field: salesorderid
                   to: source('indicium-ae-certification', 'salesorderheader')
-           
-          - name: salesreasonid 
+
+          - name: salesreasonid
             description: Esta é uma chave primária composta desta tabela de ligação e a chave estrangeira para a tabela de motivos de venda.
             tests:
               - not_null
               - relationships:
                   field: salesreasonid
                   to: source('indicium-ae-certification', 'salesreason')
+        meta:
+          dagster:
+            asset_key:
+              - "sales_salesorderheadersalesreason"
+
