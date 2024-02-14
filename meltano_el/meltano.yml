@@ -1,0 +1,81 @@
+version: 1
+default_environment: dev
+project_id: 11e644e1-f71b-433f-9b33-34c8136322ca
+environments:
+  - name: dev
+  - name: staging
+  - name: prod
+plugins:
+  extractors:
+    - name: tap-postgres
+      variant: meltanolabs
+      pip_url: git+https://github.com/MeltanoLabs/tap-postgres.git
+      config:
+        database: Adventureworks
+        user: stitch_extract
+        port: 5432
+        host: 35.239.223.162
+      select:
+        - sales-customer.*
+        - sales-salesreason.*
+        - sales-salesorderheader.*
+        - sales-salesorderheadersalesreason.*
+        - sales-salesorderdetail.*
+        - sales-creditcard.*
+        - person-person.*
+        - person-stateprovince.*
+        - person-address.*
+        - person-countryregion.*
+        - production-product.*
+      metadata:
+        "*":
+          replication-method: INCREMENTAL
+          replication-key: modifieddate
+        sales-customer:
+          table-key-properties:
+            - customerid
+        sales-salesreason:
+          table-key-properties:
+            - salesreasonid
+        sales-salesorderheader:
+          table-key-properties:
+            - salesorderid
+        sales-salesorderheadersalesreason:
+          table-key-properties:
+            - salesorderid
+            - salesreasonid
+        sales-salesorderdetail:
+          table-key-properties:
+            - salesorderid
+            - salesorderdetailid
+        sales-creditcard:
+          table-key-properties:
+            - creditcardid
+        person-person:
+          table-key-properties:
+            - businessentityid
+        person-stateprovince:
+          table-key-properties:
+            - stateprovinceid
+        person-address:
+          table-key-properties:
+            - addressid
+        person-countryregion:
+          table-key-properties:
+            - countryregioncode
+        production-product:
+          table-key-properties:
+            - productid
+  loaders:
+    - name: target-bigquery
+      variant: z3z1ma
+      pip_url: git+https://github.com/z3z1ma/target-bigquery.git
+      config:
+        credentials_path: ${MELTANO_SYS_DIR_ROOT}/credentials/indicium-ae-certification-9d71e4f08f8f.json
+        upsert: "true"
+        column_name_transforms:
+          quote: true
+        dataset: indicium-ae-certification
+        options:
+          max_workers: 4
+        dedupe_before_upsert: "True"

@@ -6,16 +6,16 @@ from dagster_dbt import (
     DagsterDbtTranslatorSettings,
 )
 
-from .constants import dbt_manifest_path
+from .constants import dbt_manifest_path, meltano_project_dir
 
 from typing import Mapping, Any, Optional
 import json
+import yaml
 
 
-class CustomDagsterDbtTranslator(
-    DagsterDbtTranslator
-):
+class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     _settings = DagsterDbtTranslatorSettings(enable_asset_checks=True)
+
     def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> Optional[str]:
         """
         Sets dagster asset group as dbt model schema.
@@ -26,7 +26,9 @@ class CustomDagsterDbtTranslator(
 @dbt_assets(
     manifest=dbt_manifest_path,
     dagster_dbt_translator=CustomDagsterDbtTranslator(),
-    partitions_def=DailyPartitionsDefinition(start_date="2011-05-31", end_date="2014-06-30"),
+    partitions_def=DailyPartitionsDefinition(
+        start_date="2011-05-31", end_date="2014-07-01"
+    ),
 )
 def indicium_ae_certification_dbt_assets(
     context: AssetExecutionContext, dbt: DbtCliResource
